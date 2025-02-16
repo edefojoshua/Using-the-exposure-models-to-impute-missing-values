@@ -1,0 +1,71 @@
+---
+title: "Using the exposure models to impute missing variables"
+author: "Joshua Edefo"
+email: "edefojoshu2000@yahoo.com"
+date: "2025-02-16"
+output: github_document
+---
+This R script used an exposure model to impute missing values in a dataset. It began by loading the necessary libraries for data manipulation and Excel file operations, and it set the working directory and random seed for reproducibility. The script then imported the dataset from an Excel file and checked for missing values across the entire dataset as well as in each individual column. Next, a linear regression model was fitted using Age and Income as predictors for TobaccoSmoking, and this model was used to impute any missing TobaccoSmoking values. Finally, after verifying that the missing values had been addressed, the script saved the updated dataset to a new Excel 
+
+Libraries
+```{r a, message=FALSE}
+library(tidyverse)
+library(readxl)
+library(usethis)
+library(writexl)  
+
+```
+
+Using Exposure model to impute missing values
+
+```{r b}
+## Set directory
+setwd("C:\\Users\\joe62\\OneDrive - Aberystwyth University\\Apps\\Desktop\\Destop Folder\\R code")
+
+## Set seed for reproducibility
+set.seed(42)
+
+## Importing the data 
+data <- read_excel("Using exposure model to predict missing values.xlsx")
+
+## View the data with missing values
+head(data)
+view(data)
+
+## Check for missing values in the entire dataset
+sum(is.na(data))  # Returns the total number of missing values in the entire dataset
+
+## Count the missing values in each column
+colSums(is.na(data))  # Returns a count of missing values for each column in the dataset
+
+## Exposure Model: Impute missing TobaccoSmoking using Age and Income as predictors
+## Fit a linear regression model to predict TobaccoSmoking
+model <- lm(TobaccoSmoking ~ Age + Income, data = data, na.action = na.exclude)
+summary(model)
+
+## Impute missing TobaccoSmoking values using the model
+data$TobaccoSmoking <- ifelse(
+  is.na(data$TobaccoSmoking),
+  predict(model, newdata = data[is.na(data$TobaccoSmoking),]),
+  data$TobaccoSmoking
+)
+
+## View the imputed data
+head(data)
+view(data)
+
+## Check if any missing values remain
+sum(is.na(data$TobaccoSmoking))
+
+## Save to an Excel file
+write_xlsx(data, "using_exposure_model_to_impute_missing_data.xlsx")
+
+```
+
+Session information
+
+```{r d, echo=FALSE}
+sessionInfo()
+```
+
+
