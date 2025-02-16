@@ -1,2 +1,2 @@
 # Using-the-exposure-models-to-impute-missing-values
-Using R
+This R script used an exposure model to impute missing values in a dataset. It began by loading the necessary libraries for data manipulation and Excel file operations, and it set the working directory and random seed for reproducibility. The script then imported the dataset from an Excel file and checked for missing values across the entire dataset as well as in each individual column. Next, a linear regression model was fitted using Age and Income as predictors for TobaccoSmoking, and this model was used to impute any missing TobaccoSmoking values. Finally, after verifying that the missing values had been addressed, the script saved the updated dataset to a new Excel sheet. 
